@@ -23,6 +23,19 @@ export const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
 
+  section{
+    display: flex;
+
+    label{
+      font-size:x-large;
+      margin:10px;
+    }
+    select{
+      font-size: 22px;
+      padding:5px;
+    }
+  }
+
   > p {
     color: #fff;
   }

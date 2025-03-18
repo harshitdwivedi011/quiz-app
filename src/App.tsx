@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { fetchQuizQuestions } from './API';
+import { Category, fetchQuizQuestions } from './API';
 import QuestionCard from './components/QuestionCard';
 import { QuestionsState, Difficulty } from './API';
 import { GlobalStyle, Wrapper } from './App.styles';
@@ -20,13 +20,15 @@ const App: React.FC = () => {
   const [userAnswers, setUserAnswers] = useState<AnswerObject[]>([]);
   const [score, setScore] = useState(0);
   const [gameOver, setGameOver] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState<Category>(Category.COMPUTER);
 
   const startTrivia = async () => {
     setLoading(true);
     setGameOver(false);
     const newQuestions = await fetchQuizQuestions(
       TOTAL_QUESTIONS,
-      Difficulty.EASY
+      Difficulty.EASY,
+      selectedCategory
     );
     setQuestions(newQuestions);
     setScore(0);
@@ -71,9 +73,22 @@ const App: React.FC = () => {
       <Wrapper>
         <h1>REACT QUIZ</h1>
         {gameOver || userAnswers.length === TOTAL_QUESTIONS ? (
-          <button className='start' onClick={startTrivia}>
-            Start Quiz
-          </button>
+          <>
+            <section>
+              <label>Select Category: </label>
+              <select
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(Number(e.target.value) as Category)}
+              >
+                <option value={Category.COMPUTER}>Computer</option>
+                <option value={Category.GENERAL_KNOWLEDGE}>General Knowledge</option>
+                <option value={Category.SPORTS}>Sports</option>
+              </select>
+            </section>
+            <button className='start' onClick={startTrivia}>
+              Start Quiz
+            </button>
+          </>
         ) : null}
         {!gameOver ? <p className='score'>Score: {score}</p> : null}
         {loading ? <p>Loading Questions...</p> : null}
